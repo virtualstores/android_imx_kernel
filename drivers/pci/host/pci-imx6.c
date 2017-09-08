@@ -389,6 +389,17 @@ static int imx6_pcie_deassert_core_reset(struct pcie_port *pp)
 	/* allow the clocks to stabilize */
 	udelay(200);
 
+	if (is_imx7d_pcie(imx6_pcie)) {
+		/* wait for more than 10us to release phy g_rst and btnrst */
+		udelay(10);
+		regmap_update_bits(imx6_pcie->reg_src, 0x2c, BIT(1), 0);
+		regmap_update_bits(imx6_pcie->reg_src, 0x2c, BIT(2), 0);
+		regmap_update_bits(imx6_pcie->reg_src, 0x2c, BIT(6), 0);
+
+		/* wait for phy pll to lock. */
+		pci_imx_phy_pll_locked(imx6_pcie);
+	}
+
 	/* Some boards don't have PCIe reset GPIO. */
 	if (gpio_is_valid(imx6_pcie->reset_gpio)) {
 		gpio_set_value_cansleep(imx6_pcie->reset_gpio, 0);
@@ -398,18 +409,9 @@ static int imx6_pcie_deassert_core_reset(struct pcie_port *pp)
 	}
 
 	/*
-	 * Release the PCIe PHY reset here
+	 * Release the PCIe PHY reset here from i.MX6
 	 */
-	if (is_imx7d_pcie(imx6_pcie)) {
-		/* wait for more than 10us to release phy g_rst and btnrst */
-		udelay(10);
-		regmap_update_bits(imx6_pcie->reg_src, 0x2c, BIT(6), 0);
-		regmap_update_bits(imx6_pcie->reg_src, 0x2c, BIT(1), 0);
-		regmap_update_bits(imx6_pcie->reg_src, 0x2c, BIT(2), 0);
-
-		/* wait for phy pll lock firstly. */
-		pci_imx_phy_pll_locked(imx6_pcie);
-	} else if (is_imx6sx_pcie(imx6_pcie)) {
+	if (is_imx6sx_pcie(imx6_pcie)) {
 		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR5,
 				IMX6SX_GPR5_PCIE_BTNRST, 0);
 	} else if (is_imx6qp_pcie(imx6_pcie)) {
@@ -452,7 +454,7 @@ static void imx6_pcie_init_phy(struct pcie_port *pp)
 
 		/* pcie phy ref clock select; 1? internal pll : external osc */
 		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR12,
-				BIT(5), 0);
+				BIT(5), BIT(5));
 	} else if (is_imx6sx_pcie(imx6_pcie)) {
 		/* Force PCIe PHY reset */
 		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR5,
@@ -990,7 +992,7 @@ static int pci_imx_suspend_noirq(struct device *dev)
 		else if (is_imx7d_pcie(imx6_pcie))
 			/* turn off external osc input */
 			regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR12,
-					BIT(5), BIT(5));
+					BIT(5), 0);
 		else if (is_imx6qp_pcie(imx6_pcie)) {
 			regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR1,
 					IMX6Q_GPR1_PCIE_REF_CLK_EN, 0);

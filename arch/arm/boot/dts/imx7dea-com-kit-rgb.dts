@@ -1,0 +1,47 @@
+
+/*
+ * Copyright (C) 2014-2015 Freescale Semiconductor, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+#include "imx7dea-com-kit.dts"
+
+
+
+/*
+ * TODO: Change settings to match the NXP/Freescale LVDS display connected
+ * to the RGB-to-LVDS bridge on the uCOM Adapter Board. The touch
+ * controller settings (ar1021 and egalax) and the timing0 values
+ * should be handled by the eadisp/eatouch command and not here.
+ * The backlight pin must be change from PWM1 (used by RGB) to PWM3
+ * when using LVDS.
+ */
+
+
+&i2c1 {
+    ar1021_rgb {
+	status = "okay";
+    };
+
+};
+
+&t_lcd {
+	clock-frequency = <33500000>;
+        hactive = <800>;
+        vactive = <480>;
+        hback-porch = <89>;
+        hfront-porch = <164>;
+        vback-porch = <75>;
+        vfront-porch = <75>;
+        hsync-len = <10>;
+        vsync-len = <10>;
+        hsync-active = <0>;
+        vsync-active = <0>;
+        de-active = <1>;
+        pixelclk-active = <1>;
+};
+
+
