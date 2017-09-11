@@ -13,13 +13,13 @@
 
 &i2c1 {
 	egalax_ts_lvds {
-		status = "disabled";
+		status = "okay";
 	};
 
 };
 
 &mxcfb1 {
-	status = "disabled";
+	status = "okay";
 };
 
 

@@ -1,0 +1,12 @@
+
+#include "imx6qea-com-kit.dts"
+
+&i2c1 {
+	ilitek_aim_rgb {
+		status = "okay";
+	};
+};
+
+&mxcfb3 {
+	status = "okay";
+};

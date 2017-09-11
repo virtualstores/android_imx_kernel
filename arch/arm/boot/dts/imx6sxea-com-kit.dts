@@ -21,7 +21,7 @@
 		t_rgb = &t_lcd;
 		t_lvds0 = &t_lvds;
 		bl_rgb = &backlight_lcd;
-		bl_lvds = &backlight_lvds;
+//		bl_lvds = &backlight_lvds;
 		rgb = &display0;
 		lvds0 = &display1;
 		ldb = &ldb;
@@ -33,7 +33,7 @@
 		stdout-path = &uart1;
 	};
 
-
+/*
 	backlight_lvds: backlight1 {
 		compatible = "pwm-backlight";
 		pwms = <&pwm1 0 5000000>;
@@ -42,7 +42,7 @@
 		fb-names = "mxs-lcdif0";
 		enable-gpios = <&gpio1 9 GPIO_ACTIVE_HIGH>;
 	};
-
+*/
 	backlight_lcd: backlight2 {
 		compatible = "pwm-backlight";
 		pwms = <&pwm2 0 5000000>;
