@@ -129,6 +129,7 @@ int driver_information[] = {DERVER_VERSION_MAJOR,DERVER_VERSION_MINOR,RELEASE_VE
 #define RELEASE_KEY    0x40
 #define RELEASE_POINT    0x00
 //#define ROTATE_FLAG
+#define INVERSE_XY_FLAG
 //#define TRANSFER_LIMIT
 #define CLOCK_INTERRUPT
 //#define SET_RESET
@@ -1001,6 +1002,10 @@ static int ilitek_i2c_process_and_report(void)
 			#ifndef ROTATE_FLAG
 			x = (((buf[i*5+1] & 0x3F) << 8) + buf[i*5+2]);
 			y = (buf[i*5+3] << 8) + buf[i*5+4];
+			#ifdef INVERSE_XY_FLAG
+			x = i2c.max_x - x;
+			y = i2c.max_y - y;
+			#endif
 			#else
 			org_x = (((buf[i*5+1] & 0x3F) << 8) + buf[i*5+2]);
 			org_y = (buf[i*5+3] << 8) + buf[i*5+4];
@@ -1102,6 +1107,10 @@ static int ilitek_i2c_process_and_report(void)
 			#ifndef ROTATE_FLAG
 				x = (((int)buf[1]) << 8) + buf[2];
 				y = (((int)buf[3]) << 8) + buf[4];
+			#ifdef INVERSE_XY_FLAG
+			x = i2c.max_x - x;
+			y = i2c.max_y - y;
+			#endif
 			#else
 				org_x = (((int)buf[1]) << 8) + buf[2];
 				org_y = (((int)buf[3]) << 8) + buf[4];
@@ -1309,6 +1318,10 @@ static int ilitek_i2c_process_and_report(void)
 						#ifndef ROTATE_FLAG
 						x = (int)buf[1 + (i * 4)] + ((int)buf[2 + (i * 4)] * 256);
 						y = (int)buf[3 + (i * 4)] + ((int)buf[4 + (i * 4)] * 256);
+						#ifdef INVERSE_XY_FLAG
+						x = i2c.max_x - x;
+						y = i2c.max_y - y;
+						#endif
 						#else
 						org_x = (int)buf[1 + (i * 4)] + ((int)buf[2 + (i * 4)] * 256);
 						org_y = (int)buf[3 + (i * 4)] + ((int)buf[4 + (i * 4)] * 256);
@@ -1389,6 +1402,10 @@ static int ilitek_i2c_process_and_report(void)
 					#ifndef ROTATE_FLAG
 					x = (int)buf[1 + (i * 4)] + ((int)buf[2 + (i * 4)] * 256);
 					y = (int)buf[3 + (i * 4)] + ((int)buf[4 + (i * 4)] * 256);
+					#ifdef INVERSE_XY_FLAG
+					x = i2c.max_x - x;
+					y = i2c.max_y - y;
+					#endif
 					#else
 					org_x = (int)buf[1 + (i * 4)] + ((int)buf[2 + (i * 4)] * 256);
 					org_y = (int)buf[3 + (i * 4)] + ((int)buf[4 + (i * 4)] * 256);

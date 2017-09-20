@@ -31,7 +31,6 @@
 		t_lvds0 = &t_lvds;
 		t_lvds1 = &t_lvds2;
 		bl_rgb = &backlight_lcd;
-		bl_lvds = &backlight_lvds;
 		rgb = &lcd;
 		ldb = &ldb;
 		ts_con_rgb = &i2c1;
@@ -163,21 +162,12 @@
 		status = "okay";
 	};
 
-	/* Backlight for LVDS 0 and 1 */
-	backlight_lvds: backlight1 {
-		compatible = "pwm-backlight";
-		pwms = <&pwm1 0 5000000>;
-		brightness-levels = <0 4 8 16 32 64 128 255>;
-		default-brightness-level = <7>;
-		status = "disabled";
-	};
-
 	/* Backlight for RGB */
 	backlight_lcd: backlight2 {
 		compatible = "pwm-backlight";
-		pwms = <&pwm2 0 5000000>;
-		brightness-levels = <0 4 8 16 32 64 128 255>;
-		default-brightness-level = <7>;
+		pwms = <&pwm2 0 10000000>;
+		brightness-levels = <0 100 253 255>;
+		default-brightness-level = <2>;
 		status = "okay";
 	};
 
@@ -314,10 +304,10 @@
 		reg = <0x41>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_rgb_connector>;
-		interrupt-parent = <&gpio2>;
-		interrupts = <18 IRQ_TYPE_EDGE_FALLING>;
-		reset-gpios = <&gpio3 14 GPIO_ACTIVE_HIGH>;
-		status = "disabled";
+		interrupt-parent = <&gpio4>;
+		interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
+		reset-gpios = <&gpio4 6 GPIO_ACTIVE_HIGH>;
+		status = "okay";
 	};
 	/* Ilitek touch controller through LVDS0 display interface connector on Carrier Board */
 	ilitek_aim_lvds0@41 {
@@ -398,7 +388,7 @@
 		interrupt-parent = <&gpio2>;
 		interrupts = <31 IRQ_TYPE_EDGE_FALLING>;
 		wakeup-gpios = <&gpio2 31 GPIO_ACTIVE_HIGH>;
-		status = "okay";
+		status = "disabled";
 	};
 
 	/* FocalTech touch controller through LVDS1 display interface connector on Carrier Board */
@@ -613,7 +603,7 @@
 				MX6QDL_PAD_SD2_DAT1__SD2_DATA1		0x17059
 				MX6QDL_PAD_SD2_DAT2__SD2_DATA2		0x17059
 				MX6QDL_PAD_SD2_DAT3__SD2_DATA3		0x17059
-				MX6QDL_PAD_NANDF_WP_B__GPIO6_IO09	0x17059
+				/*MX6QDL_PAD_NANDF_WP_B__GPIO6_IO09	0x17059*/
 			>;
 		};
 
