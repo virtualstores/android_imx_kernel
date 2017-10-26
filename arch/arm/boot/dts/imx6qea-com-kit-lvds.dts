@@ -10,14 +10,6 @@
 #include "imx6qea-com-kit.dts"
 
 
-
-&i2c1 {
-	egalax_ts_lvds {
-		status = "okay";
-	};
-
-};
-
 &mxcfb1 {
 	status = "okay";
 };
